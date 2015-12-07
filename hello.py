@@ -8,16 +8,16 @@ content = '''
 	<h1>Some title</h1>
 '''
 
-def english_word(word):
-	if word in words.words():
-		return True
-	else:
-		return False
-	#return True
+# def english_word(word):
+# 	if word in words.words():
+# 		return True
+# 	else:
+# 		return True
+# 	#return True
 
 def gimme_synsets(word):
-	if english_word(word):
-		synsets = wn.synsets(word)
+	synsets = wn.synsets(word)
+	if synsets:
 		food = wn.synset('food.n.02')
 		distances = []
 		for n,i in enumerate(synsets):
