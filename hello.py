@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from nltk.corpus import wordnet as wn
-from nltk.corpus import words
+#from nltk.corpus import words
 
 app = Flask(__name__)
 
@@ -8,33 +8,25 @@ content = '''
 	<h1>Some title</h1>
 '''
 
-# def english_word(word):
-# 	if word in words.words():
-# 		return True
-# 	else:
-# 		return True
-# 	#return True
+def is_food(synset):
+	temp_list = synset.hypernym_distances()
+	temp_item = None
+	for i in temp_list:
+		if i[0].name() in ['food.n.01', 'food.n.02']: 
+			temp_item = 'Yes'
+	if temp_item:
+		return True
+	else:
+		return False
 
 def gimme_synsets(word):
 	synsets = wn.synsets(word)
 	if synsets:
-		food = wn.synset('food.n.02')
-		distances = []
 		for n,i in enumerate(synsets):
-			dist = i.shortest_path_distance(food)
-			if dist:
-				synsets[n].distance = i.shortest_path_distance(food)
-				distances.append(i.shortest_path_distance(food))
+			if is_food(i):
+				synsets[n].is_food = True
 			else:
-				synsets[n].distance = 99
-				distances.append(99)
-
-		smallest = min(distances)
-		for n,i in enumerate(synsets):
-			if i.distance == smallest:
-				synsets[n].likely_food = True
-			else: 
-				synsets[n].likely_food = False
+				synsets[n].is_food = False
 
 		return synsets
 	else:
